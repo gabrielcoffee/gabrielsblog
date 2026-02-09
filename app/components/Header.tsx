@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const navLinks = [
     { href: "/", label: "hi" },
-    { href: "/posts", label: "posts" },
-    { href: "/archives", label: "archives" },
-    { href: "/thisisme", label: "this is me" },
+    { href: "/projects", label: "projects" },
+    { href: "/posts", label: "writings" },
+    { href: "/reviews", label: "critiques" },
 ];
 
 function MapIcon() {
@@ -52,20 +53,34 @@ function ArrowLeftIcon() {
 
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const pathname = usePathname();
+    const prevPathname = useRef(pathname);
+
+    // When the route changes, close the menu (triggers exit animation on the new page)
+    useEffect(() => {
+        if (prevPathname.current !== pathname) {
+            prevPathname.current = pathname;
+            setMenuOpen(false);
+        }
+    }, [pathname]);
 
     return (
         <header className="fixed top-0 left-0 right-0 z-50 font-hk-grotesk">
             {/* Desktop nav */}
-            <nav className="hidden md:flex justify-between items-center py-4 max-w-[600px] mx-auto">
+            <nav className="hidden md:flex justify-between items-center py-4 max-w-[600px] mx-auto backdrop-blur-sm bg-background/80">
                 {navLinks.map((link) => (
-                    <Link key={link.href} href={link.href}>
+                    <Link
+                        key={link.href}
+                        href={link.href}
+                        className="drop-shadow-sm"
+                    >
                         {link.label}
                     </Link>
                 ))}
             </nav>
 
             {/* Mobile menu button */}
-            <div className="md:hidden flex items-center justify-end p-4">
+            <div className="md:hidden flex items-center justify-end p-4 backdrop-blur-sm bg-background/80">
                 <button
                     onClick={() => setMenuOpen(!menuOpen)}
                     className="relative z-50"
