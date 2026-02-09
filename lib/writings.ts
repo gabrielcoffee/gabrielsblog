@@ -22,6 +22,10 @@ export interface Post {
  * extracts their frontmatter, and returns a sorted list (newest first).
  */
 export function getAllPosts(): PostMetadata[] {
+    if (!fs.existsSync(writingsDirectory)) {
+        return [];
+    }
+
     const fileNames = fs.readdirSync(writingsDirectory);
 
     const posts = fileNames

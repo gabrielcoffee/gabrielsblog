@@ -22,6 +22,10 @@ export interface Project {
  * extracts their frontmatter, and returns a sorted list (newest first).
  */
 export function getAllProjects(): ProjectMetadata[] {
+    if (!fs.existsSync(projectsDirectory)) {
+        return [];
+    }
+
     const fileNames = fs.readdirSync(projectsDirectory);
 
     const projects = fileNames

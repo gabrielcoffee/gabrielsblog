@@ -27,6 +27,10 @@ export interface Review {
  * extracts their frontmatter, and returns a sorted list (newest first).
  */
 export function getAllReviews(): ReviewMetadata[] {
+    if (!fs.existsSync(critiquesDirectory)) {
+        return [];
+    }
+
     const fileNames = fs.readdirSync(critiquesDirectory);
 
     const reviews = fileNames
